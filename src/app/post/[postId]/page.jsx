@@ -1,6 +1,7 @@
 import { CommentForm } from "@/components/CommentForm";
 import { CommentList } from "@/components/CommentList";
 import { Vote } from "@/components/Vote";
+import { POSTS_PER_PAGE } from "@/config";
 import { db } from "@/db";
 
 export default async function SinglePostPage({ params }) {
@@ -17,6 +18,7 @@ export default async function SinglePostPage({ params }) {
     LIMIT 1;`,
     [postId]
   );
+
   const post = posts[0];
 
   const { rows: votes } = await db.query(
