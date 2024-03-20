@@ -16,6 +16,10 @@ async function handleVote(userId, postId, newVote) {
   // Check if the user has already voted on this post
   const existingVote = await getExistingVote(userId, postId);
 
+  if (!userId) {
+    throw new Error("Cannot vote without being logged in");
+  }
+
   if (existingVote) {
     if (existingVote.vote === newVote) {
       // User is toggling their vote, so remove it
@@ -41,16 +45,16 @@ async function handleVote(userId, postId, newVote) {
 
 export async function Vote({ postId, votes }) {
   const session = await auth();
-  const existingVote = await getExistingVote(session.user.id, postId);
+  const existingVote = await getExistingVote(session?.user?.id, postId);
 
   async function upvote() {
     "use server";
-    await handleVote(session.user.id, postId, 1);
+    await handleVote(session?.user?.id, postId, 1);
   }
 
   async function downvote() {
     "use server";
-    await handleVote(session.user.id, postId, -1);
+    await handleVote(session?.user?.id, postId, -1);
   }
 
   return (
