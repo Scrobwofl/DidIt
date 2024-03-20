@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@/auth";
 import { db } from "@/db";
 import { revalidatePath } from "next/cache";
@@ -9,7 +10,6 @@ export default async function Home() {
   const session = await auth();
 
   async function savePost(formData) {
-    "use server";
     const content = formData.get("content");
     const title = formData.get("title");
     const userId = session?.user?.id;
