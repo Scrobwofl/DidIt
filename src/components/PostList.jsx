@@ -1,3 +1,5 @@
+"use server";
+
 import Link from "next/link";
 import { Pagination } from "./Pagination";
 import { Vote } from "./Vote";

@@ -14,7 +14,12 @@ async function getExistingVote(userId, postId) {
 
 async function handleVote(userId, postId, newVote) {
   // Check if the user has already voted on this post
-  const existingVote = await getExistingVote(userId, postId);
+  const session = await auth();
+  if (!userId) {
+    throw new Error("Cannot vote without being logged in");
+  }
+  // const existingVote = await getExistingVote(session.user.id, postId);
+  const existingVote = await getExistingVote(session?.user?.id, postId);
 
   if (existingVote) {
     if (existingVote.vote === newVote) {
@@ -41,16 +46,16 @@ async function handleVote(userId, postId, newVote) {
 
 export async function Vote({ postId, votes }) {
   const session = await auth();
-  const existingVote = await getExistingVote(session.user.id, postId);
+  const existingVote = await getExistingVote(session?.user?.id, postId);
 
   async function upvote() {
     "use server";
-    await handleVote(session.user.id, postId, 1);
+    await handleVote(session?.user?.id, postId, 1);
   }
 
   async function downvote() {
     "use server";
-    await handleVote(session.user.id, postId, -1);
+    await handleVote(session?.user?.id, postId, -1);
   }
 
   return (
